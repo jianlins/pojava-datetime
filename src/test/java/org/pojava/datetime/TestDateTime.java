@@ -8,8 +8,9 @@ public class TestDateTime {
     @Test
     public void test12() {
         DateTimeConfig dcfg = DateTimeConfig.getDateTimeConfig(new GregorianCalendar(78 + 2000, 4, 22).getTime());
-        DateTime utilDate = new DateTime("July of 2009", dcfg);
+        DateTime utilDate = new DateTime("July of 1909", dcfg);
         System.out.println(utilDate);
+        System.out.println( new DateTime("2/23/77", dcfg));
     }
 
     @Test

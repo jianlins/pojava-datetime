@@ -44,7 +44,7 @@ public class DateTimeConfig implements IDateTimeConfig, Serializable {
     /**
      * Allows to use different default date rather than system current date.
      */
-    private static Date defaultDate = null;
+    private Date defaultDate = null;
 
     /**
      * This determines the default interpretation of a ##/##/#### date, whether Day precedes
@@ -104,7 +104,7 @@ public class DateTimeConfig implements IDateTimeConfig, Serializable {
     }
 
     public DateTimeConfig(Date defaultDate) {
-        DateTimeConfig.defaultDate = defaultDate;
+        this.defaultDate = defaultDate;
     }
 
     /**
