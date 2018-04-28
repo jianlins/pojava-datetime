@@ -19,10 +19,7 @@ package org.pojava.datetime;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-import java.util.TimeZone;
+import java.util.*;
 
 /**
  * Establish global defaults for shaping DateTime behavior. This version supports English,
@@ -43,6 +40,11 @@ public class DateTimeConfig implements IDateTimeConfig, Serializable {
      * make here affect new calls to DateTime.
      */
     private static IDateTimeConfig globalDefault = null;
+
+    /**
+     * Allows to use different default date rather than system current date.
+     */
+    private static Date defaultDate = null;
 
     /**
      * This determines the default interpretation of a ##/##/#### date, whether Day precedes
@@ -81,7 +83,7 @@ public class DateTimeConfig implements IDateTimeConfig, Serializable {
      * that's not supported or should be overridden? Fix it locally by updating your custom
      * tzMap!
      * </p>
-     * <p/>
+     * <br>
      * <pre>
      * // Example change CST from U.S. Central to Chinese.
      * class CustomTzMap {
@@ -96,6 +98,14 @@ public class DateTimeConfig implements IDateTimeConfig, Serializable {
 
     private final Map<String, TimeZone> tzCache = new HashMap<String, TimeZone>();
 
+
+    public DateTimeConfig() {
+
+    }
+
+    public DateTimeConfig(Date defaultDate) {
+        DateTimeConfig.defaultDate = defaultDate;
+    }
 
     /**
      * Reset the global default to a different DateTimeConfig object.
@@ -125,9 +135,13 @@ public class DateTimeConfig implements IDateTimeConfig, Serializable {
         return globalDefault;
     }
 
-    private static DateTimeConfig defaultDateTimeConfig() {
+    public static DateTimeConfig defaultDateTimeConfig() {
+        return getDateTimeConfig(null);
+    }
+
+    public static DateTimeConfig getDateTimeConfig(Date defaultDate) {
         TimeZone tz = TimeZone.getDefault();
-        DateTimeConfig dtc = new DateTimeConfig();
+        DateTimeConfig dtc = new DateTimeConfig(defaultDate);
         dtc.monthMap = MonthMap.fromAllLocales();
         dtc.tzMap.put("Z", "UTC");
         dtc.tzCache.put(tz.getID(), tz);
@@ -236,7 +250,6 @@ public class DateTimeConfig implements IDateTimeConfig, Serializable {
         return tz;
     }
 
-    @Override
     public Integer lookupMonthIndex(String monthNameOrAbbreviation) {
         return monthMap.monthIndex(monthNameOrAbbreviation);
     }
@@ -274,7 +287,10 @@ public class DateTimeConfig implements IDateTimeConfig, Serializable {
     }
 
     public long systemTime() {
-        return System.currentTimeMillis();
+        if (defaultDate != null)
+            return defaultDate.getTime();
+        else
+            return System.currentTimeMillis();
     }
 
     public static void setGlobalDefaultFromBuilder(DateTimeConfigBuilder builder) {

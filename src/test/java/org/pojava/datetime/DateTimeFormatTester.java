@@ -10,7 +10,7 @@ import java.util.TimeZone;
 
 /**
  * Unit tests to verify formatter output against SimpleDateFormat output
- * <p/>
+ * <br>
  * http://download.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html
  *
  * @author John Pile

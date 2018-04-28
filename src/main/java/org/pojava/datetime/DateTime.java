@@ -53,20 +53,20 @@ import java.util.regex.Pattern;
  * <p>
  * Some notes on the date interpretations:
  * </p>
- * <p/>
+ * <br>
  * <p>
  * All dates are interpreted in your local time zone, unless a time zone is specified in the String. Time zones are configurable
  * in the DateTimeConfig object, so you can determine for your own application whether CST, for example, would adjust to Central
  * Standard Time or Chinese Standard Time.
  * </p>
- * <p/>
+ * <br>
  * <p>
  * A two-digit year will assume up to 80 years in the past and 20 years in the future. It is prudent in many cases to follow this
  * with a check based on whether you know the date to represent a past or future date. If you know you parsed a birthday, you can
  * compare with today's date and subtract 100 yrs if needed (references to birthdays 20 years in the future are rare). Similarly,
  * if you're dealing with an annuity date, you can add 100 years if the parsed date occurred in the past.
  * </p>
- * <p/>
+ * <br>
  * <p>
  * If you're parsing European dates expecting DD/MM/YYYY instead of MM/DD/YYYY, then you can alter the global DateTimeConfig
  * setting by first calling, " <code>DateTimeConfig.globalEuropeanDateFormat();</code>".
@@ -110,6 +110,7 @@ public class DateTime implements Serializable, Comparable<DateTime> {
 
     /**
      * DateTime with a specified config
+     * @param config DateTimeConfig object
      */
     public DateTime(IDateTimeConfig config) {
         this.config = config;
@@ -283,13 +284,13 @@ public class DateTime implements Serializable, Comparable<DateTime> {
         int idx = max;
         char c = '\0';
         // Working right to left, skip past numbers, colons, and four-digit years
-        boolean digitsOnly=true;
+        boolean digitsOnly = true;
         while (idx > min) {
             c = chars[idx];
-            if (c >= '0' && c <= '9' || c == ' ' && idx==max-4 && digitsOnly) {
+            if (c >= '0' && c <= '9' || c == ' ' && idx == max - 4 && digitsOnly) {
                 idx--;
             } else if (c == ':') {
-                digitsOnly=false;
+                digitsOnly = false;
                 idx--;
             } else {
                 break;
@@ -392,12 +393,12 @@ public class DateTime implements Serializable, Comparable<DateTime> {
         return DateTimeFormat.format(format, this, config().getOutputTimeZone(), config().getLocale());
     }
 
+
     /**
      * Return a String according to the provided format.
-     *
      * @param format Date format specifier
-     * @param tz     Show formatted date & time at the given TimeZone
-     * @return A formatted string version of the current DateTime.
+     * @param tz Show formatted date &amp; time at the given TimeZone
+     * @return formatted string version of the current DateTime.
      */
     public String toString(String format, TimeZone tz) {
         return DateTimeFormat.format(format, this, tz, config().getLocale());
@@ -407,7 +408,7 @@ public class DateTime implements Serializable, Comparable<DateTime> {
      * Return a String according to the provided format.
      *
      * @param format Date format specifier
-     * @param locale Show formatted date & time at the given TimeZone
+     * @param locale Show formatted date &amp; time at the given TimeZone
      * @return A formatted string version of the current DateTime.
      */
     public String toString(String format, Locale locale) {
@@ -417,7 +418,7 @@ public class DateTime implements Serializable, Comparable<DateTime> {
     /**
      * Return a String according to the provided format.
      *
-     * @param tz Show formatted date & time at the given TimeZone
+     * @param tz Show formatted date &amp; time at the given TimeZone
      * @return A formatted string version of the current DateTime.
      */
     public String toString(TimeZone tz) {
@@ -428,7 +429,7 @@ public class DateTime implements Serializable, Comparable<DateTime> {
      * Return a String according to the provided format.
      *
      * @param format Date format specifier
-     * @param tz     Show formatted date & time at the given TimeZone
+     * @param tz     Show formatted date &amp; time at the given TimeZone
      * @param locale Display date words like month or day of week in a given language.
      * @return A formatted string version of the current DateTime.
      */
@@ -707,7 +708,22 @@ public class DateTime implements Serializable, Comparable<DateTime> {
                 }
                 if (!hasDatepart.day) {
                     if (part < 1 || part > 31) {
-                        throw new IllegalArgumentException("Invalid day parsed from [" + part + "].");
+                        if (!hasDatepart.year && part < 1000) {
+                            if (part > 99) {
+                                dateState.year = 1900 + part;
+                            } else {
+                                dateState.isTwoDigitYear = true;
+                                if (dateState.centuryTurn + part - dateState.thisYear > 20) {
+                                    dateState.year = dateState.centuryTurn + part - 100;
+                                } else {
+                                    dateState.year = dateState.centuryTurn + part;
+                                }
+                            }
+                            hasDatepart.year = true;
+                            dateState.usedint[i] = true;
+                            continue;
+                        } else
+                            throw new IllegalArgumentException("Invalid day parsed from [" + part + "].");
                     }
                     dateState.day = part;
                     hasDatepart.day = true;
@@ -883,8 +899,8 @@ public class DateTime implements Serializable, Comparable<DateTime> {
     }
 
     private static String extract(String str, String remove) {
-        int pos=str.indexOf(remove);
-        int size=remove.length();
+        int pos = str.indexOf(remove);
+        int size = remove.length();
         if (pos == str.length() - 1 - size) {
             return str.substring(0, pos);
         }
@@ -929,8 +945,8 @@ public class DateTime implements Serializable, Comparable<DateTime> {
             str = str.replaceAll("([A-Z]{3})([0-9])", "$1 $2");
         }
         String tzString = tzParse(str);
-        if (tzString!=null && tzString.contains(" ")) {
-            tzString=tzString.substring(0, tzString.indexOf(' '));
+        if (tzString != null && tzString.contains(" ")) {
+            tzString = tzString.substring(0, tzString.indexOf(' '));
         }
         if ("AM".equals(tzString) || "PM".equals(tzString)) {
             tzString = null;
@@ -970,7 +986,7 @@ public class DateTime implements Serializable, Comparable<DateTime> {
         }
         // One more scan for Date.toString() style
         if (!hasDatepart.year && hasDatepart.month && str.endsWith(" " + dateState.parts[dateState.parts.length - 1])) {
-            if (str.length()>11 && str.substring(0, 11).matches("^([A-Z]{3} ){2}\\d\\d ")) {
+            if (str.length() > 11 && str.substring(0, 11).matches("^([A-Z]{3} ){2}\\d\\d ")) {
                 dateState.year = Integer.parseInt(dateState.parts[dateState.parts.length - 1]);
                 hasDatepart.year = true;
                 dateState.usedint[dateState.usedint.length - 1] = true;
@@ -1136,7 +1152,7 @@ public class DateTime implements Serializable, Comparable<DateTime> {
     @Override
     /*
      * * Reasonably unique hashCode, since we're providing an equals method.
-     * 
+     *
      * @return a hashCode varying by the most significant fields, millis and nanos.
      */
     public int hashCode() {

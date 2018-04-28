@@ -162,7 +162,7 @@ public class Duration implements Comparable<Duration>, Serializable {
     /**
      * Duration specified in milliseconds.
      *
-     * @param millis
+     * @param millis ms
      */
     public Duration(long millis) {
         this.millis = millis;
@@ -178,8 +178,8 @@ public class Duration implements Comparable<Duration>, Serializable {
      * It's a strange arrangement, but useful when representing time as an
      * offset of Epoch, where a negative value usually represents a positive year.
      *
-     * @param seconds
-     * @param nanos
+     * @param seconds seconds
+     * @param nanos nanos
      */
     public Duration(long seconds, int nanos) {
         while (nanos > 999999999) {
@@ -199,7 +199,7 @@ public class Duration implements Comparable<Duration>, Serializable {
     /**
      * Add a duration, producing a new duration.
      *
-     * @param dur
+     * @param dur duration
      * @return A newly calculated Duration.
      */
     public Duration add(Duration dur) {
@@ -209,7 +209,7 @@ public class Duration implements Comparable<Duration>, Serializable {
     /**
      * Add fixed number of (+/-) milliseconds to a Duration, producing a new Duration.
      *
-     * @param milliseconds
+     * @param milliseconds ms
      * @return A newly calculated Duration.
      */
     public Duration add(long milliseconds) {
@@ -221,8 +221,8 @@ public class Duration implements Comparable<Duration>, Serializable {
     /**
      * Add seconds and nanoseconds to a Duration, producing a new Duration.
      *
-     * @param seconds
-     * @param nanos
+     * @param seconds seconds
+     * @param nanos nanos
      * @return A newly calculated Duration.
      */
     public Duration add(long seconds, int nanos) {
@@ -266,7 +266,7 @@ public class Duration implements Comparable<Duration>, Serializable {
     }
 
     /**
-     * Return fractional seconds in nanoseconds<br/>
+     * Return fractional seconds in nanoseconds<br>
      * Sign of value will match whole time value.
      *
      * @return Sub-second portion of Duration specified in nanoseconds.

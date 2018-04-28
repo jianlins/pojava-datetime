@@ -72,17 +72,17 @@ public class MonthMapTester extends TestCase {
     }
 
     public void testThreeCharacterAbbreviation_IT() throws Exception {
-        assertEquals(0, monthMap.monthIndex("genn.").intValue());
-        assertEquals(1, monthMap.monthIndex("febbr.").intValue());
-        assertEquals(2, monthMap.monthIndex("mar.").intValue());
-        assertEquals(3, monthMap.monthIndex("apr.").intValue());
-        assertEquals(4, monthMap.monthIndex("magg.").intValue());
-        assertEquals(5, monthMap.monthIndex("giugno").intValue());
-        assertEquals(6, monthMap.monthIndex("luglio").intValue());
-        assertEquals(7, monthMap.monthIndex("ag.").intValue());
-        assertEquals(8, monthMap.monthIndex("sett.").intValue());
-        assertEquals(9, monthMap.monthIndex("ott.").intValue());
-        assertEquals(10, monthMap.monthIndex("nov.").intValue());
-        assertEquals(11, monthMap.monthIndex("dic.").intValue());
+        assertEquals(0, monthMap.monthIndex("gen").intValue());
+        assertEquals(1, monthMap.monthIndex("feb").intValue());
+        assertEquals(2, monthMap.monthIndex("mar").intValue());
+        assertEquals(3, monthMap.monthIndex("apr").intValue());
+        assertEquals(4, monthMap.monthIndex("mag").intValue());
+        assertEquals(5, monthMap.monthIndex("giug").intValue());
+        assertEquals(6, monthMap.monthIndex("lug").intValue());
+        assertEquals(7, monthMap.monthIndex("ago").intValue());
+        assertEquals(8, monthMap.monthIndex("set").intValue());
+        assertEquals(9, monthMap.monthIndex("ott").intValue());
+        assertEquals(10, monthMap.monthIndex("nov").intValue());
+        assertEquals(11, monthMap.monthIndex("dic").intValue());
     }
 }

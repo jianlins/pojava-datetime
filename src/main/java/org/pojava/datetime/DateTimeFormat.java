@@ -30,21 +30,21 @@ import java.util.TimeZone;
  * nanoseconds, while three "S" characters represent milliseconds. The upper-case "G" still
  * represents "BC" or "AD", but I added a lower-cased "g" to the format to use "BCE" or "CE".
  * While "Z" still shows time zone offset as "-HHmm", "ZZ" will add a colon, as "-HH:mm".
- * <p/>
+ * <br>
  * Because it does not "compile" the format String, DateTimeFormat can provide a static method
  * with the same performance as a constructed object. It does allow a constructed object for
  * similar behavior to existing formatters, but there is no performance advantage in doing so.
  * In either case, this class is thread-safe, provided your application is not trying to
  * change the internals of Java's TimeZone object as you're using it.
- * <p/>
+ * <br>
  * It is important to understand that the default behavior is to format the output according to
  * the system's time zone. If you want to format the output according to the DateTime object's
  * internal time zone, then pass the time zone as a parameter. For example,
- * <p/>
+ * <br>
  * <pre>
  * DateTimeFormat(&quot;yyyy-MM-dd&quot;, dateTimeObj, dateTimeObj.getTimezone);
  * </pre>
- * <p/>
+ * <br>
  * For this version, you're kind of stuck with an English-only version of dates. I'll be
  * revising that at a future date.
  *

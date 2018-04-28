@@ -198,7 +198,7 @@ public class DateTimeTester extends TestCase {
     /**
      * These tests show the consistency of the interpretation of millisecond values between the native Date object and the
      * DateTime object.
-     * <p/>
+     * <br>
      * Dates represented in BCE (before 0001) by Date.toString() cannot be distinguished from similar dates in CE. Dates after
      * 9999 are addressable, but not interpreted as a year by DateTime.
      */
@@ -902,7 +902,7 @@ public class DateTimeTester extends TestCase {
      * It requires an adjustment of 23m20s between the two dates.  Note that even this
      * involves a concession-- there were multiple time zones between Calcutta, Bombay,
      * and Madras.
-     * <p/>
+     * <br>
      * Note, these changes are provided by the TimeZone object-- and are relevant
      * to countries in many other locales.  India is chosen as a convenient example.
      */

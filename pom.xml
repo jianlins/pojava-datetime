@@ -2,9 +2,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.pojava</groupId>
+    <groupId>edu.utah.bmi.pojava</groupId>
     <artifactId>datetime</artifactId>
-    <version>3.0.2</version>
+    <version>3.0.4</version>
     <name>POJava DateTime</name>
     <description>
         POJava DateTime is a simple, light-weight Java-based API for parsing and manipulating dates.
@@ -13,21 +13,26 @@
         ambiguous date like "03/06/2014" as DMY order or MDY order are inferred by system time zone
         and locale and stored in a default config object that can be replaced or overridden.  Multiple
         languages for month names are supported without any additional configuration needed.
+        This is a forked version edited by Jianlin
     </description>
-    <url>http://www.pojava.org</url>
+    <url>https://github.com/jianlins/pojava-datetime</url>
     <properties>
         <output-directory>${basedir}/target/classes</output-directory>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <compiler-version>1.6</compiler-version>
     </properties>
     <scm>
-        <connection>scm:git:git@github.com:JohnPile/pojava-datetime.git</connection>
-        <url>scm:git:git@github.com:JohnPile/pojava-datetime.git</url>
-        <developerConnection>scm:git:git@github.com:JohnPile/pojava-datetime.git</developerConnection>
+        <connection>scm:git:git@github.com:jianlins/pojava-datetime.git</connection>
+        <url>scm:git:git@github.com:jianlins/pojava-datetime.git</url>
+        <developerConnection>scm:git:git@github.com:jianlins/pojava-datetime.git</developerConnection>
     </scm>
     <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
         <repository>
-            <id>sonatype-nexus-staging</id>
+            <id>ossrh</id>
             <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
     </distributionManagement>
@@ -113,6 +118,14 @@
                 <artifactId>maven-release-plugin</artifactId>
                 <version>2.5</version>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>6</source>
+                    <target>6</target>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
     <reporting>
@@ -126,9 +139,18 @@
             <name>John Pile</name>
             <email>john@pile.us</email>
             <organization>POJava.org</organization>
-            <organizationUrl>http://sourceforge.net/projects/pojava/
+            <organizationUrl>https://github.com/JohnPile/pojava-datetime
             </organizationUrl>
             <timezone>America/Chicago</timezone>
+        </developer>
+        <developer>
+            <id>jianlins</id>
+            <name>Jianlin Shi</name>
+            <email>jianlinshi.cn@gmail.com</email>
+            <organization>POJava.org</organization>
+            <organizationUrl>https://github.com/jianlins/pojava-datetime
+            </organizationUrl>
+            <timezone>America/Denver</timezone>
         </developer>
     </developers>
     <licenses>
@@ -146,5 +168,25 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+    <profiles>
+        <profile>
+            <id>allow-snapshots</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <repositories>
+                <repository>
+                    <id>snapshots-repo</id>
+                    <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+                    <releases>
+                        <enabled>false</enabled>
+                    </releases>
+                    <snapshots>
+                        <enabled>true</enabled>
+                    </snapshots>
+                </repository>
+            </repositories>
+        </profile>
+    </profiles>
 
 </project>

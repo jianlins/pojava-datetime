@@ -27,7 +27,7 @@ public class DateTimeConfigBuilder {
      * that's not supported or should be overridden? Fix it locally by updating your custom
      * tzMap!
      * </p>
-     * <p/>
+     * <br>
      * <pre>
      * // Example change CST from U.S. Central to Chinese.
      * class CustomTzMap {
@@ -167,7 +167,7 @@ public class DateTimeConfigBuilder {
     /**
      * Set whether a formatted year should include a minus sign when B.C.
      *
-     * @param bcPrefix
+     * @param bcPrefix bcPrefix
      * @return Prefix string in front of the year if BC (e.g. "-")
      */
     public DateTimeConfigBuilder bcPrefix(String bcPrefix) {
