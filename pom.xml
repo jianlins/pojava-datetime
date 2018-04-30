@@ -4,7 +4,7 @@
 
     <groupId>edu.utah.bmi.pojava</groupId>
     <artifactId>pojava</artifactId>
-    <version>3.0.5</version>
+    <version>3.0.6</version>
     <name>POJava DateTime</name>
     <description>
         POJava DateTime is a simple, light-weight Java-based API for parsing and manipulating dates.

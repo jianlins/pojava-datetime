@@ -879,7 +879,7 @@ public class DateTime implements Serializable, Comparable<DateTime> {
         /**
          * Validate
          */
-        if (!hasDatepart.year || !hasDatepart.month) {
+        if (!hasDatepart.year) {
             throw new IllegalArgumentException("Could not determine Year, Month, and Day from '" + dateString + "'");
         }
         if (dateState.month == FEB) {
