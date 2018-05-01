@@ -10,7 +10,7 @@ public class TestDateTime {
         DateTimeConfig dcfg = DateTimeConfig.getDateTimeConfig(new GregorianCalendar(78 + 2000, 4, 22).getTime());
         DateTime utilDate = new DateTime("July of 1909", dcfg);
         System.out.println(utilDate);
-        System.out.println( new DateTime("2/23/77", dcfg));
+        System.out.println(new DateTime("2/23/77", dcfg));
     }
 
     @Test
@@ -43,4 +43,12 @@ public class TestDateTime {
     }
 
 
+    @Test
+    public void test17() {
+        DateTimeConfig dcfg = DateTimeConfig.getDateTimeConfig(new GregorianCalendar(78 + 2000, 4, 22).getTime());
+        DateTime utilDate = new DateTime("February", DateTimeConfig.getDateTimeConfig(null));
+        System.out.println(utilDate);
+        utilDate = new DateTime("February");
+        System.out.println(utilDate);
+    }
 }
