@@ -984,7 +984,7 @@ public class DateTime implements Serializable, Comparable<DateTime> {
         if (hasDatepart.year && dateState.year == 0) {
             throw new IllegalArgumentException("Invalid zero year parsed.");
         }
-        // One more scan for Date.toString() style
+        // Onex more scan for Date.toString() style
         if (!hasDatepart.year && hasDatepart.month && str.endsWith(" " + dateState.parts[dateState.parts.length - 1])) {
             if (str.length() > 11 && str.substring(0, 11).matches("^([A-Z]{3} ){2}\\d\\d ")) {
                 dateState.year = Integer.parseInt(dateState.parts[dateState.parts.length - 1]);
@@ -1003,6 +1003,7 @@ public class DateTime implements Serializable, Comparable<DateTime> {
         }
         assignIntegersToRemainingSlots(config, hasDatepart, dateState);
         adjustHourBasedOnAMPM(dateState);
+        adjustYearOnReferenceDate(hasDatepart,dateState,config);
         validateParsedDate(str, hasDatepart, dateState);
 
         if (dateState.isBC && dateState.year >= 0) {
@@ -1020,6 +1021,21 @@ public class DateTime implements Serializable, Comparable<DateTime> {
 
         returnDt.systemDur.nanos = dateState.nanosecond;
         return returnDt;
+    }
+
+    private static void adjustYearOnReferenceDate(HasDatepart hasDatepart, DateState dateState, IDateTimeConfig config) {
+        if(!hasDatepart.year){
+            if(hasDatepart.month){
+                DateTime defaultDatTime = new DateTime(config.systemTime(), config);
+                int defaultMonth=defaultDatTime.toDate().getMonth();
+                if (dateState.month<defaultMonth){
+                    dateState.year= dateState.thisYear;
+                }else{
+                    dateState.year=dateState.thisYear-1;
+                }
+                hasDatepart.year=true;
+            }
+        }
     }
 
     /**

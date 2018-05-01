@@ -35,4 +35,12 @@ public class TestDateTime {
         System.out.println(utilDate);
     }
 
+    @Test
+    public void test16() {
+        DateTimeConfig dcfg = DateTimeConfig.getDateTimeConfig(new GregorianCalendar(78 + 2000, 4, 22).getTime());
+        DateTime utilDate = new DateTime("February", dcfg);
+        System.out.println(utilDate);
+    }
+
+
 }
