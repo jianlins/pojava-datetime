@@ -110,6 +110,7 @@ public class DateTime implements Serializable, Comparable<DateTime> {
 
     /**
      * DateTime with a specified config
+     *
      * @param config DateTimeConfig object
      */
     public DateTime(IDateTimeConfig config) {
@@ -396,8 +397,9 @@ public class DateTime implements Serializable, Comparable<DateTime> {
 
     /**
      * Return a String according to the provided format.
+     *
      * @param format Date format specifier
-     * @param tz Show formatted date &amp; time at the given TimeZone
+     * @param tz     Show formatted date &amp; time at the given TimeZone
      * @return formatted string version of the current DateTime.
      */
     public String toString(String format, TimeZone tz) {
@@ -1003,7 +1005,7 @@ public class DateTime implements Serializable, Comparable<DateTime> {
         }
         assignIntegersToRemainingSlots(config, hasDatepart, dateState);
         adjustHourBasedOnAMPM(dateState);
-        adjustYearOnReferenceDate(hasDatepart,dateState,config);
+        adjustYearOnReferenceDate(hasDatepart, dateState, config);
         validateParsedDate(str, hasDatepart, dateState);
 
         if (dateState.isBC && dateState.year >= 0) {
@@ -1024,16 +1026,16 @@ public class DateTime implements Serializable, Comparable<DateTime> {
     }
 
     private static void adjustYearOnReferenceDate(HasDatepart hasDatepart, DateState dateState, IDateTimeConfig config) {
-        if(!hasDatepart.year){
-            if(hasDatepart.month){
+        if (!hasDatepart.year) {
+            if (hasDatepart.month) {
                 DateTime defaultDatTime = new DateTime(config.systemTime(), config);
-                int defaultMonth=defaultDatTime.toDate().getMonth();
-                if (dateState.month<defaultMonth){
-                    dateState.year= dateState.thisYear;
-                }else{
-                    dateState.year=dateState.thisYear-1;
+                int defaultMonth = defaultDatTime.toDate().getMonth();
+                if (dateState.month <= defaultMonth) {
+                    dateState.year = dateState.thisYear;
+                } else {
+                    dateState.year = dateState.thisYear - 1;
                 }
-                hasDatepart.year=true;
+                hasDatepart.year = true;
             }
         }
     }
