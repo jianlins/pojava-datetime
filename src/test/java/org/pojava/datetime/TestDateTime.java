@@ -51,4 +51,20 @@ public class TestDateTime {
         utilDate = new DateTime("February");
         System.out.println(utilDate);
     }
+
+    @Test
+    public void test18() {
+        DateTimeConfig dcfg = DateTimeConfig.getDateTimeConfig(new GregorianCalendar(20 + 2000, 10, 3).getTime());
+//        DateTime utilDate = new DateTime("Friday", dcfg);
+//        assert (utilDate.toString().equals("2020-10-31 00:00:00"));
+        DateTime utilDate = new DateTime("monday", dcfg);
+        assert (utilDate.toString().equals("2020-11-02 00:00:00"));
+        System.out.println(utilDate);
+        utilDate = new DateTime("next monday", dcfg);
+        assert (utilDate.toString().equals("2020-11-09 00:00:00"));
+        System.out.println(utilDate);
+        utilDate = new DateTime("last monday", dcfg);
+        assert (utilDate.toString().equals("2020-10-28 00:00:00"));
+        System.out.println(utilDate);
+    }
 }

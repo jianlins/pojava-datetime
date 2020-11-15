@@ -18,11 +18,13 @@ package org.pojava.datetime;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
-import java.util.TimeZone;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.*;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * <p>
@@ -100,6 +102,17 @@ public class DateTime implements Serializable, Comparable<DateTime> {
 
     private static final Pattern partsPattern = Pattern.compile("[^\\p{L}\\d]+");
 
+    protected static Map<String, Integer> dayMap = Stream.of(
+            new AbstractMap.SimpleEntry<>("MONDAY", 1),
+            new AbstractMap.SimpleEntry<>("TUESDAY", 2),
+            new AbstractMap.SimpleEntry<>("WEDNESDAY", 3),
+            new AbstractMap.SimpleEntry<>("THURSDAY", 4),
+            new AbstractMap.SimpleEntry<>("FRIDAY", 5),
+            new AbstractMap.SimpleEntry<>("SATURDAY", 6),
+            new AbstractMap.SimpleEntry<>("SUNDAY", 7))
+            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    ;
+
     /**
      * Default constructor gives current time to millisecond.
      */
@@ -107,6 +120,7 @@ public class DateTime implements Serializable, Comparable<DateTime> {
         config();
         this.systemDur = new Duration(config.systemTime());
     }
+
 
     /**
      * DateTime with a specified config
@@ -918,6 +932,11 @@ public class DateTime implements Serializable, Comparable<DateTime> {
      * @return New DateTime interpreted from string according to alternate rules.
      */
     public static DateTime parse(String str, IDateTimeConfig config) {
+        LocalDate referenceDate = Instant.ofEpochMilli(config.systemTime()).atZone(ZoneId.of(config.getOutputTimeZone().getID())).toLocalDate();
+        LocalDate parsedWeekDay = parseDays(str, referenceDate);
+        if (parsedWeekDay != null) {
+            return new DateTime(Tm.calcTime(parsedWeekDay.getYear(), parsedWeekDay.getMonth().getValue(), parsedWeekDay.getDayOfMonth()), config.getOutputTimeZone());
+        }
 
         HasDatepart hasDatepart = new HasDatepart();
         DateState dateState = new DateState();
@@ -1006,6 +1025,7 @@ public class DateTime implements Serializable, Comparable<DateTime> {
         assignIntegersToRemainingSlots(config, hasDatepart, dateState);
         adjustHourBasedOnAMPM(dateState);
         adjustYearOnReferenceDate(hasDatepart, dateState, config);
+
         validateParsedDate(str, hasDatepart, dateState);
 
         if (dateState.isBC && dateState.year >= 0) {
@@ -1023,6 +1043,37 @@ public class DateTime implements Serializable, Comparable<DateTime> {
 
         returnDt.systemDur.nanos = dateState.nanosecond;
         return returnDt;
+    }
+
+    private static LocalDate parseDays(String str, LocalDate referenceDate) {
+        str = str.toUpperCase();
+        Boolean previousWeek = false;
+        Boolean nextWeek = false;
+        if (str.contains("LAST")) {
+            previousWeek = true;
+            str = str.replace("LAST", "");
+            str = str.trim();
+        }
+
+        if (str.contains("NEXT")) {
+            nextWeek = true;
+            str = str.replace("NEXT", "");
+            str = str.trim();
+        }
+        int daynum = dayMap.getOrDefault(str, -1);
+        if (daynum == -1) {
+            return null;
+        }
+        int referDayNum = referenceDate.getDayOfWeek().getValue();
+        int gapDays = 0;
+        if (nextWeek) {
+            gapDays=-daynum-(7-referDayNum);
+        } else if (previousWeek || daynum > referDayNum) {
+            gapDays = daynum + (7 - referDayNum);
+        } else {
+            gapDays = referDayNum - daynum;
+        }
+        return referenceDate.minusDays(gapDays);
     }
 
     private static void adjustYearOnReferenceDate(HasDatepart hasDatepart, DateState dateState, IDateTimeConfig config) {
